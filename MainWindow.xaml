@@ -2,12 +2,14 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:GrayScalingApp"
+        xmlns:local="clr-namespace:GrayScalingApp.ViewModel"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:GrayScalingApp.ViewModel"
         Title="Grayscale Demo"
         Width="450" Height="250"
-        mc:Ignorable="d">
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True,
+                                         Type={x:Type local:MainWindowViewModel}}">
     
     <Grid>
         <Grid.RowDefinitions>
@@ -30,7 +32,9 @@
                 Margin="10" Padding="20"
                 BorderBrush="Gray" BorderThickness="1">
             <StackPanel>
-                <Image Width="64" Height="64" Source="{Binding IconBackground}" HorizontalAlignment="Left" />
+                <Image Width="64" Height="64"
+                       HorizontalAlignment="Left"
+                       Source="{Binding IconBackground}" />
             </StackPanel>
         </Border>
     </Grid>

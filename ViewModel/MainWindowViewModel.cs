@@ -1,9 +1,7 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace GrayScalingApp.ViewModel
 {
@@ -26,8 +24,8 @@ namespace GrayScalingApp.ViewModel
                 originalImage.Freeze();
 
                 IconBackground = originalImage;
-                infoText = "Grayscale is OFF";
                 isGrayscaleToggled = false;
+                UpdateInfoText();
             }
             catch (Exception ex)
             {
@@ -71,7 +69,6 @@ namespace GrayScalingApp.ViewModel
                     isGrayscaleToggled = value;
                     OnPropertyChanged();
 
-                    // apply the grayscale filter
                     UpdateInfoText();
                     ApplyGrayscaleFilter();
                 }
@@ -85,8 +82,6 @@ namespace GrayScalingApp.ViewModel
 
         private void ApplyGrayscaleFilter()
         {
-            // use FormatConvertedBitmap to convert the image to grayscale
-
             if (originalImage == null)
             {
                 return;
@@ -94,7 +89,7 @@ namespace GrayScalingApp.ViewModel
 
             if (IsGrayscaleToggled)
             {
-                // create a grayscale version of the image
+                // gray scale version of the image
                 FormatConvertedBitmap grayscaleBitmap = new FormatConvertedBitmap();
                 grayscaleBitmap.BeginInit();
                 grayscaleBitmap.Source = originalImage;
