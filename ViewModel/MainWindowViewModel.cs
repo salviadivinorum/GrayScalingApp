@@ -1,26 +1,41 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using System.Windows.Media;
-using GrayScalingApp.Model;
+using System.Windows.Media.Imaging;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace GrayScalingApp.ViewModel
 {
-    public class MainWindowViewModel : BaseViewModel
+    public class MainWindowViewModel : INotifyPropertyChanged
     {
-        private ImageSource? iconBackground;
-        private string searchText;
+        private ImageSource iconBackground;
+        private string infoText;
         private bool isGrayscaleToggled;
+        private readonly BitmapImage originalImage;
 
         public MainWindowViewModel()
         {
-            // TODO: Initialize the icon background.
-            // For now, IconBackground can be set when the image is loaded.
-            GrayscaleCommand = new RelayCommand(ExecuteGrayscale, CanExecuteGrayscale);
-            UpdateSearchText();
+            try
+            {
+                originalImage = new BitmapImage();
+                originalImage.BeginInit();
+                originalImage.UriSource = new Uri("pack://application:,,,/Images/edit.png", UriKind.Absolute);
+                originalImage.CacheOption = BitmapCacheOption.OnLoad;
+                originalImage.EndInit();
+                originalImage.Freeze();
+
+                IconBackground = originalImage;
+                infoText = "Grayscale is OFF";
+                isGrayscaleToggled = false;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error loading image: {ex.Message}");
+            }
         }
 
-        public ICommand GrayscaleCommand { get; }
-
-        public ImageSource? IconBackground
+        public ImageSource IconBackground
         {
             get => iconBackground;
             set
@@ -33,14 +48,14 @@ namespace GrayScalingApp.ViewModel
             }
         }
 
-        public string SearchText
+        public string InfoText
         {
-            get => searchText;
+            get => infoText;
             set
             {
-                if (searchText != value)
+                if (infoText != value)
                 {
-                    searchText = value;
+                    infoText = value;
                     OnPropertyChanged();
                 }
             }
@@ -55,25 +70,51 @@ namespace GrayScalingApp.ViewModel
                 {
                     isGrayscaleToggled = value;
                     OnPropertyChanged();
-                    UpdateSearchText();
+
+                    // apply the grayscale filter
+                    UpdateInfoText();
+                    ApplyGrayscaleFilter();
                 }
             }
         }
 
-        private bool CanExecuteGrayscale(object parameter)
+        private void UpdateInfoText()
         {
-            // Enable the command by default.
-            return true;
+            InfoText = IsGrayscaleToggled ? "Grayscale is ON" : "Grayscale is OFF";
         }
 
-        private void ExecuteGrayscale(object parameter)
+        private void ApplyGrayscaleFilter()
         {
-            // TODO: Add gray scaling logic here.
+            // use FormatConvertedBitmap to convert the image to grayscale
+
+            if (originalImage == null)
+            {
+                return;
+            }
+
+            if (IsGrayscaleToggled)
+            {
+                // create a grayscale version of the image
+                FormatConvertedBitmap grayscaleBitmap = new FormatConvertedBitmap();
+                grayscaleBitmap.BeginInit();
+                grayscaleBitmap.Source = originalImage;
+                grayscaleBitmap.DestinationFormat = PixelFormats.Gray8;
+                grayscaleBitmap.EndInit();
+                grayscaleBitmap.Freeze();
+
+                IconBackground = grayscaleBitmap;
+            }
+            else
+            {
+                IconBackground = originalImage;
+            }
         }
 
-        private void UpdateSearchText()
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            SearchText = IsGrayscaleToggled ? "Grayscale is ON" : "Grayscale is OFF";
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
