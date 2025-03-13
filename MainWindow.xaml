@@ -1,0 +1,54 @@
+﻿<Window x:Class="GrayScalingApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:GrayScalingApp.ViewModel"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        Title="Grayscale icon button app"
+        Width="800" Height="450"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True,
+                                         Type={x:Type local:MainWindowViewModel}}">
+
+    <Window.Resources>
+        <Style x:Key="IconImageStyle" TargetType="Image">
+            <Setter Property="Width" Value="16" />
+            <Setter Property="Height" Value="16" />
+            <Setter Property="Margin" Value="0,2,0,2" />
+        </Style>
+        <DataTemplate x:Key="editImage">
+            <Image Source="/GrayScalingApp;component/Images/edit.png" Style="{StaticResource IconImageStyle}" />
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Row="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="editButton"
+                        Grid.Column="0"
+                        Margin="5,0,5,0"
+                        ContentTemplate="{StaticResource editImage}" />
+                <TextBox x:Name="infoFieldTextBox"
+                         Grid.Column="1"
+                         Margin="0,0,5,0" VerticalContentAlignment="Center"
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                <ToggleButton x:Name="toggleButtonGrayscale"
+                              Grid.Column="2"
+                              Margin="0,0,5,0"
+                              Content="Gray scale the icon"
+                              IsChecked="{Binding IsGrayscaleToggled}"
+                              Command="{Binding GrayscaleCommand}" />
+            </Grid>
+        </DockPanel>
+    </Grid>
+</Window>
