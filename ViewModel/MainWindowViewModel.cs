@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -25,11 +26,11 @@ namespace GrayScalingApp.ViewModel
 
                 IconBackground = originalImage;
                 isGrayscaleToggled = false;
-                UpdateInfoText();
+
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Error loading image: {ex.Message}");
+                MessageBox.Show($"Error loading image: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -46,19 +47,6 @@ namespace GrayScalingApp.ViewModel
             }
         }
 
-        public string InfoText
-        {
-            get => infoText;
-            set
-            {
-                if (infoText != value)
-                {
-                    infoText = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         public bool IsGrayscaleToggled
         {
             get => isGrayscaleToggled;
@@ -69,15 +57,9 @@ namespace GrayScalingApp.ViewModel
                     isGrayscaleToggled = value;
                     OnPropertyChanged();
 
-                    UpdateInfoText();
                     ApplyGrayscaleFilter();
                 }
             }
-        }
-
-        private void UpdateInfoText()
-        {
-            InfoText = IsGrayscaleToggled ? "Grayscale is ON" : "Grayscale is OFF";
         }
 
         private void ApplyGrayscaleFilter()
