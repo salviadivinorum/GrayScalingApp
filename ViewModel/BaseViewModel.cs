@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace GrayScalingApp.Model
+namespace GrayScalingApp.ViewModel
 {
     public class BaseViewModel : INotifyPropertyChanged
     {

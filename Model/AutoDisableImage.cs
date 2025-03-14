@@ -62,7 +62,7 @@ namespace GrayScalingApp.Model
                     // Opacity = 0.25;
                 }
 
-               
+
             }
         }
     }
