@@ -13,10 +13,10 @@ namespace GrayScalingApp.Model
                 typeof(AutoDisableImage),
                 new FrameworkPropertyMetadata(
                     true,
-                    OnAutoDisableImagePropertyChanged));
+                    OnIsEnabledPropertyChanged));
         }
 
-        private static void OnAutoDisableImagePropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs args)
+        private static void OnIsEnabledPropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs args)
         {
             if (source is AutoDisableImage me)
             {
@@ -50,19 +50,17 @@ namespace GrayScalingApp.Model
                     grayscaleBitmap.Source = bmp;
                     grayscaleBitmap.DestinationFormat = PixelFormats.Gray8;
                     grayscaleBitmap.EndInit();
-                    grayscaleBitmap.Freeze(); // Freeze for performance
+                    grayscaleBitmap.Freeze();
 
                     Source = grayscaleBitmap;
 
                     // Create opacity mask
                     var brush = new ImageBrush(bmp);
-                    brush.Freeze(); // Freeze for performance
+                    brush.Freeze();
                     OpacityMask = brush;
 
                     // Opacity = 0.25;
                 }
-
-
             }
         }
     }
